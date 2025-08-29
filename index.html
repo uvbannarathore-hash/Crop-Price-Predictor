@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crop Price Predictor</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Chart.js Date Adapter (Moment.js) -->
+    <script src="https://cdn.jsdelivr.net/npm/moment@2.29.1/moment.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-moment@1.0.0/dist/chartjs-adapter-moment.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        canvas {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-green-100 to-blue-100 min-h-screen flex items-center justify-center p-4">
+    <div class="bg-white p-8 rounded-lg shadow-xl w-full max-w-2xl">
+        <h1 class="text-4xl font-bold text-center text-green-700 mb-6">🌾 Dynamic Crop Price Forecast 📈</h1>
+        <p class="text-center text-gray-600 mb-8">
+            Select your desired crop and market to get future price predictions.
+        </p>
+
+        <div class="mb-8 p-4 bg-green-50 rounded-md shadow-inner">
+            <h2 class="text-2xl font-semibold text-green-800 mb-3">Current Market Snapshot</h2>
+            <p class="text-lg text-gray-700">
+                Today's Date: <span id="current-date" class="font-medium text-green-900">Loading...</span>
+            </p>
+            <p class="text-lg text-gray-700">
+                Current Modal Price: <span class="font-bold text-green-900">~ ₹2550 / Quintal</span> 
+                <span class="text-sm text-gray-500">(Estimate, actual real-time data integration would go here)</span>
+            </p>
+        </div>
+
+        <h2 class="text-2xl font-semibold text-blue-800 mb-4">Upcoming Price Predictions</h2>
+        
+        <!-- NEW: Dropdowns for selection -->
+        <div class="mb-6 grid grid-cols-2 gap-4">
+            <div>
+                <label for="select-commodity" class="block text-gray-700 text-sm font-bold mb-2">Commodity:</label>
+                <select id="select-commodity" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                    <!-- Options will be loaded dynamically -->
+                </select>
+            </div>
+            <div>
+                <label for="select-state" class="block text-gray-700 text-sm font-bold mb-2">State:</label>
+                <select id="select-state" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                    <!-- Options will be loaded dynamically -->
+                </select>
+            </div>
+            <div>
+                <label for="select-district" class="block text-gray-700 text-sm font-bold mb-2">District:</label>
+                <select id="select-district" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                    <!-- Options will be loaded dynamically -->
+                </select>
+            </div>
+            <div>
+                <label for="select-market" class="block text-gray-700 text-sm font-bold mb-2">Market:</label>
+                <select id="select-market" class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                    <!-- Options will be loaded dynamically -->
+                </select>
+            </div>
+        </div>
+
+        <!-- Input for number of forecast days -->
+        <div class="mb-6 flex items-center space-x-3">
+            <label for="forecast-days" class="text-lg text-gray-700 font-medium">Forecast for next</label>
+            <input type="number" id="forecast-days" value="7" min="1" max="90" 
+                   class="p-2 border border-gray-300 rounded-md w-20 text-center text-lg focus:ring-blue-500 focus:border-blue-500">
+            <span class="text-lg text-gray-700">days</span>
+            <button id="get-predictions-btn" 
+                    class="ml-4 px-4 py-2 bg-blue-600 text-white font-semibold rounded-md 
+                           hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                Get Forecast
+            </button>
+        </div>
+
+        <div id="loading-message" class="text-center text-blue-600 text-lg mb-4">
+            Loading predictions...
+        </div>
+
+        <div id="error-message" class="text-center text-red-600 text-lg mb-4 hidden">
+            Failed to load predictions. Please try again later.
+        </div>
+
+        <!-- Canvas for the Chart -->
+        <div class="mb-8">
+            <canvas id="priceChart"></canvas>
+        </div>
+
+        <div class="overflow-x-auto">
+            <table class="min-w-full bg-white border border-gray-200 rounded-lg">
+                <thead>
+                    <tr class="bg-blue-100 text-blue-800 uppercase text-sm leading-normal">
+                        <th class="py-3 px-6 text-left">Date</th>
+                        <th class="py-3 px-6 text-left">Predicted Price (₹/Quintal)</th>
+                        <th class="py-3 px-6 text-left">Lower Bound</th>
+                        <th class="py-3 px-6 text-left">Upper Bound</th>
+                    </tr>
+                </thead>
+                <tbody id="predictions-table-body" class="text-gray-700 text-sm font-light">
+                    <!-- Predictions will be inserted here by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+
+        <p class="text-xs text-gray-500 mt-6 text-center">
+            Disclaimer: These are model predictions and actual market prices may vary.
+        </p>
+    </div>
+
+    <script>
+        let priceChart; // Declare chart variable globally
+        let availableOptions = { commodities: [], states: [], districts: [], markets: [] };
+        const FLASK_SERVER_URL = 'http://127.0.0.1:5000'; // Define Flask server URL
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const currentDateElement = document.getElementById('current-date');
+            const predictionsTableBody = document.getElementById('predictions-table-body');
+            const loadingMessage = document.getElementById('loading-message');
+            const errorMessage = document.getElementById('error-message');
+            const forecastDaysInput = document.getElementById('forecast-days');
+            const getPredictionsBtn = document.getElementById('get-predictions-btn');
+            const ctx = document.getElementById('priceChart').getContext('2d');
+
+            // Dropdown elements
+            const selectCommodity = document.getElementById('select-commodity');
+            const selectState = document.getElementById('select-state');
+            const selectDistrict = document.getElementById('select-district');
+            const selectMarket = document.getElementById('select-market');
+
+            // Display today's date
+            const today = new Date();
+            currentDateElement.textContent = today.toLocaleDateString('en-IN', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+
+            // Initialize the Chart.js chart
+            priceChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [], // Dates will go here
+                    datasets: [{
+                        label: 'Predicted Modal Price (₹/Quintal)',
+                        data: [], // Prices will go here
+                        borderColor: 'rgb(59, 130, 246)', // Tailwind blue-500
+                        backgroundColor: 'rgba(59, 130, 246, 0.2)', // Light blue fill
+                        tension: 0.1,
+                        fill: true
+                    },
+                    {
+                        label: 'Lower Bound',
+                        data: [],
+                        borderColor: 'rgba(100, 116, 139, 0.5)', // Tailwind slate-500
+                        backgroundColor: 'transparent',
+                        borderDash: [5, 5],
+                        pointRadius: 0,
+                        tension: 0.1
+                    },
+                    {
+                        label: 'Upper Bound',
+                        data: [],
+                        borderColor: 'rgba(100, 116, 139, 0.5)', // Tailwind slate-500
+                        backgroundColor: 'transparent',
+                        borderDash: [5, 5],
+                        pointRadius: 0,
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Crop Price Forecast Trend',
+                            font: {
+                                size: 18
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            type: 'time',
+                            time: {
+                                unit: 'day'
+                            },
+                            title: {
+                                display: true,
+                                text: 'Date'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Price (₹/Quintal)'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Function to populate dropdowns
+            function populateDropdown(selectElement, options) {
+                selectElement.innerHTML = '<option value="">--Select--</option>'; // Default option
+                options.forEach(option => {
+                    const opt = document.createElement('option');
+                    opt.value = option;
+                    opt.textContent = option;
+                    selectElement.appendChild(opt);
+                });
+            }
+
+            // NEW: Function to check if Flask server is running
+            async function checkServerStatus() {
+                try {
+                    const response = await fetch(`${FLASK_SERVER_URL}/`); // Ping the root endpoint
+                    return response.ok;
+                } catch (error) {
+                    return false;
+                }
+            }
+
+            // Function to fetch available options from Flask API
+            async function fetchOptions() {
+                loadingMessage.classList.remove('hidden');
+                errorMessage.classList.add('hidden');
+                predictionsTableBody.innerHTML = ''; // Clear existing table content
+
+                const serverIsRunning = await checkServerStatus();
+                if (!serverIsRunning) {
+                    loadingMessage.classList.add('hidden');
+                    errorMessage.classList.remove('hidden');
+                    errorMessage.textContent = 'Error: Flask server is not running or accessible. Please start `app.py`.';
+                    return;
+                }
+
+                try {
+                    const response = await fetch(`${FLASK_SERVER_URL}/options`);
+                    if (!response.ok) {
+                        // Check if the server is down or the route is not found
+                        if (response.status === 404) {
+                            throw new Error(`Endpoint not found. Is the Flask server running and the '/options' route defined? Status: ${response.status}`);
+                        } else {
+                            throw new Error(`HTTP error! Status: ${response.status}`);
+                        }
+                    }
+                    availableOptions = await response.json();
+                    
+                    populateDropdown(selectCommodity, availableOptions.commodities);
+                    populateDropdown(selectState, availableOptions.states);
+                    populateDropdown(selectDistrict, availableOptions.districts);
+                    populateDropdown(selectMarket, availableOptions.markets);
+
+                    // Set default selections if available (e.g., for the initial Wheat/Varanasi model)
+                    if (availableOptions.commodities.includes("Wheat")) selectCommodity.value = "Wheat";
+                    if (availableOptions.states.includes("Uttar Pradesh")) selectState.value = "Uttar Pradesh";
+                    if (availableOptions.districts.includes("Varanasi")) selectDistrict.value = "Varanasi";
+                    if (availableOptions.markets.includes("Varanasi")) selectMarket.value = "Varanasi";
+
+                } catch (error) {
+                    console.error("Error fetching options:", error);
+                    loadingMessage.classList.add('hidden');
+                    errorMessage.classList.remove('hidden'); // Show error message
+                    errorMessage.textContent = `Error loading options: ${error.message}. Please ensure the Flask server is running and models are loaded.`;
+                }
+            }
+
+            // Function to fetch predictions
+            async function fetchPredictions(days, commodity, state, district, market) {
+                loadingMessage.classList.remove('hidden');
+                errorMessage.classList.add('hidden');
+                predictionsTableBody.innerHTML = ''; // Clear existing table content
+
+                const serverIsRunning = await checkServerStatus();
+                if (!serverIsRunning) {
+                    loadingMessage.classList.add('hidden');
+                    errorMessage.classList.remove('hidden');
+                    errorMessage.textContent = 'Error: Flask server is not running or accessible. Please start `app.py`.';
+                    return;
+                }
+
+                if (!commodity || !state || !district || !market) {
+                    errorMessage.classList.remove('hidden');
+                    errorMessage.textContent = 'Please select Commodity, State, District, and Market.';
+                    loadingMessage.classList.add('hidden');
+                    return;
+                }
+
+                try {
+                    const response = await fetch(`${FLASK_SERVER_URL}/predict?days=${days}&commodity=${commodity}&state=${state}&district=${district}&market=${market}`);
+                    if (!response.ok) {
+                        // Check if the server is down or the route is not found
+                        if (response.status === 404) {
+                            throw new Error(`Prediction endpoint not found. Is the Flask server running and the '/predict' route defined? Status: ${response.status}`);
+                        } else {
+                            throw new Error(`HTTP error! Status: ${response.status}`);
+                        }
+                    }
+                    const data = await response.json();
+
+                    loadingMessage.classList.add('hidden'); // Hide loading message
+
+                    if (data.length === 0) {
+                        predictionsTableBody.innerHTML = '<tr><td colspan="4" class="py-3 px-6 text-center">No predictions available for this selection.</td></tr>';
+                        // Clear chart if no data
+                        priceChart.data.labels = [];
+                        priceChart.data.datasets[0].data = [];
+                        priceChart.data.datasets[1].data = [];
+                        priceChart.data.datasets[2].data = [];
+                        priceChart.update();
+                    } else {
+                        const dates = data.map(p => p.date);
+                        const predictedPrices = data.map(p => p.predicted_price);
+                        const lowerBounds = data.map(p => p.lower_bound);
+                        const upperBounds = data.map(p => p.upper_bound);
+
+                        // Update chart data
+                        priceChart.data.labels = dates;
+                        priceChart.data.datasets[0].data = predictedPrices;
+                        priceChart.data.datasets[1].data = lowerBounds;
+                        priceChart.data.datasets[2].data = upperBounds;
+                        priceChart.update(); // Redraw the chart
+
+                        data.forEach(prediction => {
+                            const row = document.createElement('tr');
+                            row.classList.add('border-b', 'border-gray-200', 'hover:bg-gray-100');
+                            row.innerHTML = `
+                                <td class="py-3 px-6 text-left whitespace-nowrap">${prediction.date}</td>
+                                <td class="py-3 px-6 text-left">₹${prediction.predicted_price}</td>
+                                <td class="py-3 px-6 text-left">₹${prediction.lower_bound}</td>
+                                <td class="py-3 px-6 text-left">₹${prediction.upper_bound}</td>
+                            `;
+                            predictionsTableBody.appendChild(row);
+                        });
+                    }
+                } catch (error) {
+                    console.error("Error fetching predictions:", error);
+                    loadingMessage.classList.add('hidden');
+                    errorMessage.classList.remove('hidden'); // Show error message
+                    errorMessage.textContent = `Failed to load predictions: ${error.message}. Please check your selection and ensure the Flask server is running.`;
+                    predictionsTableBody.innerHTML = '<tr><td colspan="4" class="py-3 px-6 text-center text-red-500">Error loading data.</td></tr>';
+                    // Clear chart on error
+                    priceChart.data.labels = [];
+                    priceChart.data.datasets[0].data = [];
+                    priceChart.data.datasets[1].data = [];
+                    priceChart.data.datasets[2].data = [];
+                    priceChart.update();
+                }
+            }
+
+            // Event listener for the button click
+            getPredictionsBtn.addEventListener('click', () => {
+                const days = forecastDaysInput.value;
+                const commodity = selectCommodity.value;
+                const state = selectState.value;
+                const district = selectDistrict.value;
+                const market = selectMarket.value;
+
+                if (days && parseInt(days) > 0) {
+                    fetchPredictions(parseInt(days), commodity, state, district, market);
+                } else {
+                    alert('Please enter a valid number of days for the forecast.');
+                }
+            });
+
+            // Event listeners for dropdown changes to trigger new predictions
+            selectCommodity.addEventListener('change', () => {
+                const days = forecastDaysInput.value;
+                const commodity = selectCommodity.value;
+                const state = selectState.value;
+                const district = selectDistrict.value;
+                const market = selectMarket.value;
+                fetchPredictions(parseInt(days), commodity, state, district, market);
+            });
+
+            selectState.addEventListener('change', () => {
+                const days = forecastDaysInput.value;
+                const commodity = selectCommodity.value;
+                const state = selectState.value;
+                const district = selectDistrict.value;
+                const market = selectMarket.value;
+                fetchPredictions(parseInt(days), commodity, state, district, market);
+            });
+
+            selectDistrict.addEventListener('change', () => {
+                const days = forecastDaysInput.value;
+                const commodity = selectCommodity.value;
+                const state = selectState.value;
+                const district = selectDistrict.value;
+                const market = selectMarket.value;
+                fetchPredictions(parseInt(days), commodity, state, district, market);
+            });
+
+            selectMarket.addEventListener('change', () => {
+                const days = forecastDaysInput.value;
+                const commodity = selectCommodity.value;
+                const state = selectState.value;
+                const district = selectDistrict.value;
+                const market = selectMarket.value;
+                fetchPredictions(parseInt(days), commodity, state, district, market);
+            });
+
+
+            // Initial setup: fetch options and then trigger initial prediction
+            fetchOptions().then(() => {
+                // After options are loaded, trigger initial prediction with default values
+                const days = forecastDaysInput.value;
+                const commodity = selectCommodity.value;
+                const state = selectState.value;
+                const district = selectDistrict.value;
+                const market = selectMarket.value;
+                fetchPredictions(parseInt(days), commodity, state, district, market);
+            });
+        });
+    </script>
+</body>
+</html>

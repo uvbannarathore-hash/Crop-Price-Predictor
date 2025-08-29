@@ -1,0 +1,86 @@
+State,District,Market,Commodity,Variety,grade,Date,Min_Price_Rs,Max_Price_Rs,Modal_Price_Rs
+Uttar Pradesh,Agra,Agra,Wheat,Dara,FAQ,28-08-2025,2550,2610,2580
+Uttar Pradesh,Sitapur,Viswan,Wheat,Dara,FAQ,28-08-2025,2460,2500,2480
+Uttar Pradesh,Sitapur,Sitapur,Wheat,Dara,FAQ,28-08-2025,2480,2520,2500
+Uttar Pradesh,Shahjahanpur,Tilhar,Wheat,Dara,Non-FAQ,28-08-2025,2460,2480,2470
+Uttar Pradesh,Shahjahanpur,Shahjahanpur,Wheat,Dara,FAQ,28-08-2025,2500,2570,2550
+Uttar Pradesh,Shahjahanpur,Puwaha,Wheat,Dara,FAQ,28-08-2025,2550,2600,2580
+Uttar Pradesh,Rampur,Rampur,Wheat,Dara,FAQ,28-08-2025,2510,2610,2560
+Uttar Pradesh,Raebarelli,Jayas,Wheat,Dara,FAQ,28-08-2025,2560,2580,2570
+Uttar Pradesh,Prayagraj,Sirsa,Wheat,Dara,FAQ,28-08-2025,2500,2700,2600
+Uttar Pradesh,Prayagraj,Ajuha,Wheat,Dara,FAQ,28-08-2025,2520,2570,2550
+Uttar Pradesh,Pratapgarh,Pratapgarh,Wheat,Dara,FAQ,28-08-2025,2450,2650,2550
+Uttar Pradesh,Pillibhit,Pilibhit,Wheat,Dara,Non-FAQ,28-08-2025,2405,2480,2440
+Uttar Pradesh,Meerut,Meerut,Wheat,Dara,FAQ,28-08-2025,2570,2670,2620
+Uttar Pradesh,Mathura,Kosikalan,Wheat,Dara,FAQ,28-08-2025,2500,2600,2550
+Uttar Pradesh,Lucknow,Lucknow,Wheat,Dara,FAQ,28-08-2025,2500,2600,2550
+Uttar Pradesh,Lalitpur,Lalitpur,Wheat,Dara,FAQ,28-08-2025,2460,2550,2500
+Uttar Pradesh,Khiri (Lakhimpur),Maigalganj,Wheat,Dara,FAQ,28-08-2025,2500,2600,2550
+Uttar Pradesh,Kanpur Dehat,Jhijhank,Wheat,Dara,Non-FAQ,28-08-2025,2425,2500,2435
+Uttar Pradesh,Unnao,Unnao,Wheat,Dara,FAQ,28-08-2025,2540,2600,2560
+Uttar Pradesh,Aligarh,Khair,Wheat,Dara,Non-FAQ,28-08-2025,2500,2595,2540
+Uttar Pradesh,Amroha,Amroha,Wheat,Dara,FAQ,28-08-2025,2560,2580,2570
+Uttar Pradesh,Amroha,Dhanaura,Wheat,Dara,Non-FAQ,28-08-2025,2480,2575,2500
+Uttar Pradesh,Shahjahanpur,Tilhar,Wheat,Dara,FAQ,28-08-2025,2490,2530,2510
+Uttar Pradesh,Sambhal,Bhehjoi,Wheat,Dara,Non-FAQ,28-08-2025,2500,2545,2540
+Uttar Pradesh,Raebarelli,Raibareilly,Wheat,Dara,FAQ,28-08-2025,2490,2510,2500
+Uttar Pradesh,Pillibhit,Pilibhit,Wheat,Dara,FAQ,28-08-2025,2505,2585,2545
+Uttar Pradesh,Maharajganj,Partaval,Wheat,Dara,FAQ,28-08-2025,2435,2570,2500
+Uttar Pradesh,Lakhimpur,Golagokarnath,Wheat,Dara,FAQ,28-08-2025,2425,2550,2520
+Uttar Pradesh,Khiri (Lakhimpur),Mohammdi,Wheat,Dara,FAQ,28-08-2025,2485,2570,2530
+Uttar Pradesh,Kaushambi,Bharwari,Wheat,Dara,FAQ,28-08-2025,2450,2550,2500
+Uttar Pradesh,Kanpur,Kanpur(Grain),Wheat,Dara,FAQ,28-08-2025,2490,2590,2540
+Uttar Pradesh,Kanpur,Choubepur,Wheat,Dara,FAQ,28-08-2025,2470,2550,2520
+Uttar Pradesh,Jaunpur,Jaunpur,Wheat,Dara,Non-FAQ,28-08-2025,2480,2520,2500
+Uttar Pradesh,Gorakhpur,Chorichora,Wheat,Dara,Non-FAQ,28-08-2025,2425,2580,2550
+Uttar Pradesh,Gonda,Gonda,Wheat,Dara,FAQ,28-08-2025,2580,2610,2590
+Uttar Pradesh,Ghaziabad,Ghaziabad,Wheat,Dara,FAQ,28-08-2025,2580,2600,2590
+Uttar Pradesh,Firozabad,Firozabad,Wheat,Dara,FAQ,28-08-2025,2560,2595,2575
+Uttar Pradesh,Etah,Etah,Wheat,Dara,FAQ,28-08-2025,2425,2600,2532
+Uttar Pradesh,Chandauli,Chandoli,Wheat,Dara,FAQ,28-08-2025,2535,2585,2565
+Uttar Pradesh,Azamgarh,Azamgarh,Wheat,Dara,FAQ,28-08-2025,2500,2600,2550
+Uttar Pradesh,Jhansi,Mauranipur,Wheat,Dara,FAQ,28-08-2025,2460,2725,2520
+Uttar Pradesh,Siddharth Nagar,Naugarh,Wheat,Dara,FAQ,28-08-2025,2525,2560,2530
+Uttar Pradesh,Kannuj,Kannauj,Wheat,Dara,FAQ,28-08-2025,2480,2560,2520
+Uttar Pradesh,Jaunpur,Mugrabaadshahpur,Wheat,Dara,FAQ,28-08-2025,2470,2670,2570
+Uttar Pradesh,Kasganj,Kasganj,Wheat,Dara,FAQ,28-08-2025,2540,2600,2560
+Uttar Pradesh,Kanpur Dehat,Pukharayan,Wheat,Dara,Non-FAQ,28-08-2025,2430,2450,2440
+Uttar Pradesh,Kanpur,Uttaripura,Wheat,Dara,FAQ,28-08-2025,2475,2575,2525
+Uttar Pradesh,Jhansi,Jhansi (Grain),Wheat,Dara,FAQ,28-08-2025,2500,2600,2540
+Uttar Pradesh,Jaunpur,Jaunpur,Wheat,Dara,FAQ,28-08-2025,2550,2590,2570
+Uttar Pradesh,Jalaun (Orai),Jalaun,Wheat,Dara,FAQ,28-08-2025,2460,2485,2476
+Uttar Pradesh,Hathras,Sikandraraau,Wheat,Dara,FAQ,28-08-2025,2450,2530,2495
+Uttar Pradesh,Hardoi,Sandi,Wheat,Dara,FAQ,28-08-2025,2500,2570,2535
+Uttar Pradesh,Hardoi,Hardoi,Wheat,Dara,FAQ,28-08-2025,2500,2560,2530
+Uttar Pradesh,Gonda,Nawabganj,Wheat,Dara,FAQ,28-08-2025,2500,2575,2550
+Uttar Pradesh,Etawah,Etawah,Wheat,Dara,FAQ,28-08-2025,2485,2530,2520
+Uttar Pradesh,Bulandshahar,Sikarpur,Wheat,Dara,FAQ,28-08-2025,2520,2570,2550
+Uttar Pradesh,Bulandshahar,Khurja,Wheat,Dara,FAQ,28-08-2025,2540,2640,2590
+Uttar Pradesh,Bahraich,Naanpara,Wheat,Dara,FAQ,28-08-2025,2350,2425,2400
+Uttar Pradesh,Badaun,Dataganj,Wheat,Dara,FAQ,28-08-2025,2450,2500,2480
+Uttar Pradesh,Auraiya,Achalda,Wheat,Dara,FAQ,28-08-2025,2500,2600,2550
+Uttar Pradesh,Aligarh,Charra,Wheat,Dara,FAQ,28-08-2025,2500,2520,2510
+Uttar Pradesh,Mainpuri,Mainpuri,Wheat,Dara,FAQ,28-08-2025,2470,2490,2480
+Uttar Pradesh,Mirzapur,Mirzapur,Wheat,Dara,FAQ,28-08-2025,2500,2600,2560
+Uttar Pradesh,Prayagraj,Allahabad,Wheat,Dara,FAQ,28-08-2025,2425,2540,2510
+Uttar Pradesh,Raebarelli,Lalganj,Wheat,Dara,FAQ,28-08-2025,2450,2550,2500
+Uttar Pradesh,Jalaun (Orai),Orai,Wheat,Dara,FAQ,28-08-2025,2450,2520,2490
+Uttar Pradesh,Jalaun (Orai),Madhogarh,Wheat,Dara,Non-FAQ,28-08-2025,2425,2475,2450
+Uttar Pradesh,Jalaun (Orai),Ait,Wheat,Dara,FAQ,28-08-2025,2425,2550,2450
+Uttar Pradesh,Hathras,Haathras,Wheat,Dara,FAQ,28-08-2025,2500,2580,2560
+Uttar Pradesh,Hardoi,Madhoganj,Wheat,Dara,FAQ,28-08-2025,2500,2550,2530
+Uttar Pradesh,Ghaziabad,Ghaziabad,Wheat,Dara,Non-FAQ,28-08-2025,2425,2445,2435
+Uttar Pradesh,Firozabad,Tundla,Wheat,Dara,FAQ,28-08-2025,2535,2590,2575
+Uttar Pradesh,Fatehpur,Bindki,Wheat,Dara,FAQ,28-08-2025,2500,2630,2590
+Uttar Pradesh,Jaunpur,Shahganj,Wheat,Dara,FAQ,28-08-2025,2550,2570,2560
+Uttar Pradesh,Bulandshahar,Buland Shahr,Wheat,Dara,FAQ,28-08-2025,2560,2590,2575
+Uttar Pradesh,Barabanki,Safdarganj,Wheat,Dara,FAQ,28-08-2025,2500,2600,2550
+Uttar Pradesh,Ballia,Vilthararoad,Wheat,Dara,Non-FAQ,28-08-2025,2600,2700,2650
+Uttar Pradesh,Ballia,Ballia,Wheat,Dara,FAQ,28-08-2025,2520,2560,2540
+Uttar Pradesh,Bahraich,Bahraich,Wheat,Dara,FAQ,28-08-2025,2500,2600,2550
+Uttar Pradesh,Badaun,Badayoun,Wheat,Dara,FAQ,28-08-2025,2460,2570,2500
+Uttar Pradesh,Ayodhya,Faizabad,Wheat,Dara,Non-FAQ,28-08-2025,2400,2490,2460
+Uttar Pradesh,Aligarh,Aligarh,Wheat,Dara,FAQ,28-08-2025,2500,2600,2560
+Uttar Pradesh,Sonbhadra,Robertsganj,Wheat,Dara,FAQ,28-08-2025,2430,2660,2550
+Uttar Pradesh,Basti,Basti,Wheat,Dara,FAQ,28-08-2025,2425,2580,2530
+Uttar Pradesh,Siddharth Nagar,Sahiyapur,Wheat,Dara,FAQ,28-08-2025,2500,2610,2550
