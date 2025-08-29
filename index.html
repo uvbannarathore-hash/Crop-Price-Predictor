@@ -42,7 +42,7 @@
 
         <h2 class="text-2xl font-semibold text-blue-800 mb-4">Upcoming Price Predictions</h2>
         
-        <!-- NEW: Dropdowns for selection -->
+        <!-- Dropdowns for selection -->
         <div class="mb-6 grid grid-cols-2 gap-4">
             <div>
                 <label for="select-commodity" class="block text-gray-700 text-sm font-bold mb-2">Commodity:</label>
@@ -120,7 +120,8 @@
     <script>
         let priceChart; // Declare chart variable globally
         let availableOptions = { commodities: [], states: [], districts: [], markets: [] };
-        const FLASK_SERVER_URL = 'http://127.0.0.1:5000'; // Define Flask server URL
+        // --- NEW: Update this URL to your Render app's public URL ---
+        const FLASK_SERVER_URL = 'https://crop-price-predictor-uvbannarathore.onrender.com'; 
 
         document.addEventListener('DOMContentLoaded', () => {
             const currentDateElement = document.getElementById('current-date');
@@ -220,10 +221,11 @@
                 });
             }
 
-            // NEW: Function to check if Flask server is running
+            // Function to check if Flask server is running
             async function checkServerStatus() {
                 try {
-                    const response = await fetch(`${FLASK_SERVER_URL}/`); // Ping the root endpoint
+                    // Ping the root endpoint of the deployed app
+                    const response = await fetch(`${FLASK_SERVER_URL}/`); 
                     return response.ok;
                 } catch (error) {
                     return false;
@@ -240,19 +242,14 @@
                 if (!serverIsRunning) {
                     loadingMessage.classList.add('hidden');
                     errorMessage.classList.remove('hidden');
-                    errorMessage.textContent = 'Error: Flask server is not running or accessible. Please start `app.py`.';
+                    errorMessage.textContent = 'Error: The deployed Flask server is not running or accessible. Please check Render logs.';
                     return;
                 }
 
                 try {
                     const response = await fetch(`${FLASK_SERVER_URL}/options`);
                     if (!response.ok) {
-                        // Check if the server is down or the route is not found
-                        if (response.status === 404) {
-                            throw new Error(`Endpoint not found. Is the Flask server running and the '/options' route defined? Status: ${response.status}`);
-                        } else {
-                            throw new Error(`HTTP error! Status: ${response.status}`);
-                        }
+                        throw new Error(`HTTP error! Status: ${response.status}`);
                     }
                     availableOptions = await response.json();
                     
@@ -271,7 +268,7 @@
                     console.error("Error fetching options:", error);
                     loadingMessage.classList.add('hidden');
                     errorMessage.classList.remove('hidden'); // Show error message
-                    errorMessage.textContent = `Error loading options: ${error.message}. Please ensure the Flask server is running and models are loaded.`;
+                    errorMessage.textContent = `Error loading options: ${error.message}. Please check your deployed Flask server logs.`;
                 }
             }
 
@@ -285,7 +282,7 @@
                 if (!serverIsRunning) {
                     loadingMessage.classList.add('hidden');
                     errorMessage.classList.remove('hidden');
-                    errorMessage.textContent = 'Error: Flask server is not running or accessible. Please start `app.py`.';
+                    errorMessage.textContent = 'Error: The deployed Flask server is not running or accessible. Please check Render logs.';
                     return;
                 }
 
@@ -299,12 +296,7 @@
                 try {
                     const response = await fetch(`${FLASK_SERVER_URL}/predict?days=${days}&commodity=${commodity}&state=${state}&district=${district}&market=${market}`);
                     if (!response.ok) {
-                        // Check if the server is down or the route is not found
-                        if (response.status === 404) {
-                            throw new Error(`Prediction endpoint not found. Is the Flask server running and the '/predict' route defined? Status: ${response.status}`);
-                        } else {
-                            throw new Error(`HTTP error! Status: ${response.status}`);
-                        }
+                        throw new Error(`HTTP error! Status: ${response.status}`);
                     }
                     const data = await response.json();
 
@@ -347,7 +339,7 @@
                     console.error("Error fetching predictions:", error);
                     loadingMessage.classList.add('hidden');
                     errorMessage.classList.remove('hidden'); // Show error message
-                    errorMessage.textContent = `Failed to load predictions: ${error.message}. Please check your selection and ensure the Flask server is running.`;
+                    errorMessage.textContent = `Failed to load predictions: ${error.message}. Please check your selection and deployed Flask server logs.`;
                     predictionsTableBody.innerHTML = '<tr><td colspan="4" class="py-3 px-6 text-center text-red-500">Error loading data.</td></tr>';
                     // Clear chart on error
                     priceChart.data.labels = [];
