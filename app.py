@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory # Import send_from_directory
 from flask_cors import CORS
 import pandas as pd
 from prophet import Prophet
@@ -18,7 +18,7 @@ print("Loading Prophet models...")
 for filename in os.listdir(MODEL_DIR):
     if filename.startswith('prophet_model_') and filename.endswith('.pkl'):
         try:
-            # Remove prefix and suffix to get the core parameters string
+            # Extract parameters from filename: e.g., prophet_model_Wheat_Uttar_Pradesh_Varanasi_Varanasi.pkl
             params_str = filename.replace('prophet_model_', '').replace('.pkl', '')
             
             # Split by underscore. This will give parts like ['Wheat', 'Uttar', 'Pradesh', 'Varanasi', 'Varanasi']
@@ -35,8 +35,9 @@ for filename in os.listdir(MODEL_DIR):
                 district_raw = parts[-2]
                 
                 # Reconstruct the state name by joining the middle parts
-                # This handles states like "Uttar_Pradesh" correctly
-                state_parts_raw = parts[1:-2]
+                # This handles states like "Uttar_Pradesh" or "Madhya_Pradesh" correctly
+                # It takes all parts from index 1 up to (but not including) the last two parts.
+                state_parts_raw = parts[1:-2] 
                 state_raw = '_'.join(state_parts_raw)
 
                 # Format for display (replace underscores with spaces and title case)
@@ -59,14 +60,13 @@ if not TRAINED_MODELS:
     print("No Prophet models found or loaded. Please ensure models are saved as 'prophet_model_*.pkl'.")
     # For a production app, you might want to exit here: exit() 
 
-# --- Root route for server status check ---
+# --- NEW: Root route to serve index.html ---
 @app.route('/', methods=['GET'])
-def server_status():
+def serve_index():
     """
-    A simple endpoint to confirm the Flask server is running.
-    Used by the frontend's checkServerStatus() function.
+    Serves the index.html file as the main page of the application.
     """
-    return jsonify({"status": "Flask server is running!"}), 200
+    return send_from_directory('.', 'index.html') # Serve index.html from the current directory
 
 # --- API Endpoint for Predictions ---
 @app.route('/predict', methods=['GET'])
